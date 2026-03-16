@@ -16,8 +16,9 @@ llm = ChatOpenAI(model="gpt-5-nano", api_key=os.getenv("OPEN_API_KEY"))
 
 stdio_server_params = StdioServerParameters(
     command="python",
-    args=["C:\\Users\\nilsh\\Projects\\mcp-crash-course\\servers\\math_server.py"]
+    args=["C:\\Users\\nilsh\\Projects\\mcp-crash-course\\servers\\math_server.py"],
 )
+
 
 async def main():
     async with stdio_client(stdio_server_params) as (read, write):
@@ -28,8 +29,17 @@ async def main():
             print(tools)
 
             agent = create_agent(llm, tools)
-            result = await agent.ainvoke({"messages": [HumanMessage(content="What is 54 + 2 * 3? use tools to calculate the answer")]})
+            result = await agent.ainvoke(
+                {
+                    "messages": [
+                        HumanMessage(
+                            content="What is 54 + 2 * 3? use tools to calculate the answer"
+                        )
+                    ]
+                }
+            )
             print(result["messages"][-1].content)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
